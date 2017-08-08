@@ -1,11 +1,13 @@
 # F2BDistro
 @Krelkci Aug 2017
 https://twitter.com/Krelkci
+https://www.blackhillsinfosec.com/configure-distributed-fail2ban/
+
 
 Fail2Ban Distro is a proof of concept that can be built and scaled.
 
 Additional information can be found at Black Hills Information Security's Blog post:
-
+ https://www.blackhillsinfosec.com/configure-distributed-fail2ban/
 
 Files:
 
@@ -34,3 +36,6 @@ https://www.fail2ban.org/
 
 SSHFS: 
 https://github.com/libfuse/sshfs
+
+Distributed Fail2Ban
+https://www.blackhillsinfosec.com/configure-distributed-fail2ban/

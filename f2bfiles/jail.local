@@ -1,0 +1,25 @@
+[DEFAULT]
+
+# "ignoreip" can be an IP address, a CIDR mask or a DNS host
+ignoreip = 127.0.0.1/8 
+bantime  = 1800
+maxretry = 3
+
+backend = auto
+destemail = root@localhost
+banaction = iptables-multiport
+mta = sendmail
+
+[ssh]
+enabled  = true
+port     = 22
+filter   = sshd
+logpath  = /var/log/auth.log
+maxretry = 2
+
+[LogDistro]
+backend=polling
+enabled = true
+filter=newbans
+logpath = /opt/logdistro/logs/newbans.log
+maxretry = 1

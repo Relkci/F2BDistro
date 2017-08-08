@@ -1,0 +1,56 @@
+#file: /etc/ansible/roles/common/tasks/fail2ban.yml
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Install SSHFS
+      apt: pkg=sshfs state=installed update-cache=yes
+
+    - name: Install fail2ban
+      apt: pkg=fail2ban state=installed update-cache=yes
+
+    - name: Make Directory /opt/logdistro
+      file: path=/opt/logdistro state=directory
+
+    - name: Make Directory /opt/logdistro/keys
+      file: path=/opt/logdistro/keys state=directory
+
+    - name: Install Key
+      copy: src=/etc/ansible/roles/files/fail2ban_key_newbans.rsa dest=/opt/logdistro/keys/f2bcourrier.rsa owner=root group=root mode="u=,g=,o=rw"
+
+    - name: Set Key perms
+      shell: "chmod 600 /opt/logdistro/keys/f2bcourrier.rsa"
+
+    - name: Unmount logs if exists
+      mount:
+        path: /opt/logdistro/logs
+        state: absent
+
+    - name: Add FSTab for autoboot
+      lineinfile:
+        path: /etc/fstab
+        line: 'f2bcourrier@[IP OF SERVER]:/opt/logdistro  /opt/logdistro/logs  fuse.sshfs  auto,reconnect,allow_other,StrictHostKeyChecking=no,cache=no,IdentityFile=/opt/logdistro/keys/f2bcourrier.rsa,defaults,_netdev  0  0'
+
+    - name: Make Directory /opt/logdistro/logs
+      file: path=/opt/logdistro/logs state=directory
+
+    - name: Remount from FSTab
+      shell: 'mount -a'
+      
+    - name: Install Fail2Ban Jail config
+      template: jail.local dest=/etc/fail2ban/jail.local
+   
+    - name: Install Fail2Ban updated action file
+      copy: src=iptables-multiport.conf dest=/etc/fail2ban/action.d/iptables-multiport.conf
+
+    - name: Install Fail2Ban newban filter
+      copy: src=newbans.conf  dest=/etc/fail2ban/filter.d/newbans.conf owner=root group=root group=root mode="u=rw,g=r,o=r"
+
+    - name: Install custom SSH Filter
+      copy: src=sshd.conf dest=/etc/fail2ban/filter.d/sshd.conf owner=root group=root mode="u=rw,g=r,o=r"
+    
+    - name: Reload Fail2Ban
+      service: 
+        name: fail2ban 
+        state: restarted

@@ -1,9 +1,10 @@
 # F2BDistro
 @Krelkci Aug 2017
+https://twitter.com/Krelkci
 
 Fail2Ban Distro is a proof of concept that can be built and scaled.
 
-Additional inforamtion can be found at Black Hills Information Security's Blog post:
+Additional information can be found at Black Hills Information Security's Blog post:
 
 
 Files:
